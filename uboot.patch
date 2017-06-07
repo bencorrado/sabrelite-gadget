@@ -1,0 +1,32 @@
+diff --git a/include/configs/nitrogen6x.h b/include/configs/nitrogen6x.h
+index c22fed7..9b92d90 100644
+--- a/include/configs/nitrogen6x.h
++++ b/include/configs/nitrogen6x.h
+@@ -277,10 +277,16 @@
+ 	(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_INIT_SP_OFFSET)
+ 
+ /* Environment organization */
+-#define CONFIG_ENV_SIZE			(8 * 1024)
++#define CONFIG_ENV_SIZE			(128 * 1024)
+ 
+ #if defined(CONFIG_SABRELITE)
+ #define CONFIG_ENV_IS_IN_MMC
++#undef CONFIG_ENV_IS_IN_MMC
++#define CONFIG_ENV_IS_IN_FAT
++#define FAT_ENV_INTERFACE      "mmc"
++#define FAT_ENV_DEVICE_AND_PART        "1"
++#define FAT_ENV_FILE           "uboot.env"
++#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
+ #else
+ #define CONFIG_ENV_IS_IN_SPI_FLASH
+ #endif
+@@ -301,6 +307,9 @@
+ 
+ #define CONFIG_SYS_ALT_MEMTEST
+ 
++#define CONFIG_FAT_WRITE
++#define CONFIG_SUPPORT_RAW_INITRD
++
+ /*
+  * PCI express
+  */

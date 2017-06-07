@@ -1,0 +1,33 @@
+name: sabrelite
+version: 16-0.1
+summary: Sabre Lite MX6
+description: |
+ Bootloader files and partitoning data to create a
+ bootable Ubuntu Core image for the Sabre Lite MX6 board.
+type: gadget
+architectures:
+  - armhf
+confinement: strict
+grade: stable
+
+parts:
+  uboot:
+    plugin: make
+    source: git://git.denx.de/u-boot.git
+    source-branch: v2017.01
+    artifacts: [u-boot.imx]
+    prepare: |
+      git apply ../../../uboot.patch
+      make mx6qsabrelite_config
+    build: |
+      CROSS_COMPILE=arm-linux-gnueabi- make
+    install: |
+      cp u-boot.imx $SNAPCRAFT_PART_INSTALL/
+      tools/mkenvimage -r -s 131072 -o $SNAPCRAFT_PART_INSTALL/uboot.env ../../../uboot.env.in
+      cd $SNAPCRAFT_PART_INSTALL/; ln -s uboot.env uboot.conf
+    build-packages:
+      - libpython2.7-dev
+      - build-essential
+      - bc
+      - gcc-arm-linux-gnueabi
+
